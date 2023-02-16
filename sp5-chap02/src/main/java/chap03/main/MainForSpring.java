@@ -1,14 +1,20 @@
-package main;
-
-import assembler.Assembler;
-import spring.*;
+package chap03.main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class MainForAssembler {
+import chap03.spring.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class MainForSpring {
+
+    private static ApplicationContext ctx = null;
+
     public static void main(String[] args) throws IOException {
+        ctx = new AnnotationConfigApplicationContext(AppCtx.class);
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String command;
         while (true) {
@@ -24,19 +30,25 @@ public class MainForAssembler {
             } else if (command.startsWith("change ")) {
                 processChangeCommand(command.split(" "));
                 continue;
+            } else if (command.equalsIgnoreCase("list")) {
+                processListCommand();
+                continue;
+            } else if (command.startsWith("info")) {
+                processInfoCommand(command.split(" "));
+                continue;
+            } else if (command.equalsIgnoreCase("version")) {
+                processVersionCommand();
+                continue;
             }
             printHelp();
         }
     }
-
-    private static Assembler assembler = new Assembler();
-
     private static void processNewCommand(String[] arg) {
         if (arg.length != 5) {
             printHelp();
             return;
         }
-        MemberRegisterService regSvc = assembler.getMemberRegisterService();
+        MemberRegisterService regSvc = ctx.getBean("memberRegSvc", MemberRegisterService.class);
         RegisterRequest req = new RegisterRequest();
         req.setEmail(arg[1]);
         req.setName(arg[2]);
@@ -60,7 +72,7 @@ public class MainForAssembler {
             printHelp();
             return;
         }
-        ChangePasswordService changePwdSvc = assembler.getChangePasswordService();
+        ChangePasswordService changePwdSvc = ctx.getBean("changePwdSvc", ChangePasswordService.class);
         try {
             changePwdSvc.changePassword(arg[1], arg[2], arg[3]);
             System.out.println("암호 변경 완료\n");
@@ -69,6 +81,25 @@ public class MainForAssembler {
         } catch (WrongIdPasswordException e) {
             System.out.println("이메일 또는 암호 불일치\n");
         }
+    }
+
+    private static void processListCommand() {
+        MemberListPrinter listPrinter = ctx.getBean("memberListPrinter", MemberListPrinter.class);
+        listPrinter.printAll();
+    }
+
+    private static void processInfoCommand(String[] arg) {
+        if (arg.length != 2) {
+            printHelp();
+            return;
+        }
+        MemberInfoPrinter infoPrinter = ctx.getBean("infoPrinter", MemberInfoPrinter.class);
+        infoPrinter.printMemberInfo(arg[1]);
+    }
+
+    private static void processVersionCommand() {
+        VersionPrinter versionPrinter = ctx.getBean("versionPrinter", VersionPrinter.class);
+        versionPrinter.print();
     }
 
     private static void printHelp() {

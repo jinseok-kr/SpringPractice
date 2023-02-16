@@ -1,6 +1,9 @@
-package spring;
+package chap04.spring;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ChangePasswordService {
+    @Autowired
     private MemberDao memberDao;
 
 //    public ChangePasswordService(MemberDao memberDao) {

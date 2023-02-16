@@ -1,4 +1,4 @@
-package spring;
+package chap03.spring;
 
 public class MemberInfoPrinter {
     private MemberDao memberDao;
