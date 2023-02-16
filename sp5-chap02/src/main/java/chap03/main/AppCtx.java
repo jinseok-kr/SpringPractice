@@ -1,8 +1,8 @@
-package main;
+package chap03.main;
 
+import chap03.spring.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import spring.*;
 
 @Configuration
 public class AppCtx {

@@ -1,4 +1,4 @@
-package spring;
+package chap03.spring;
 
 public class RegisterRequest {
     private String email;

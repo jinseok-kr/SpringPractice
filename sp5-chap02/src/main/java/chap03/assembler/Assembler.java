@@ -1,8 +1,8 @@
-package assembler;
+package chap03.assembler;
 
-import spring.ChangePasswordService;
-import spring.MemberDao;
-import spring.MemberRegisterService;
+import chap03.spring.ChangePasswordService;
+import chap03.spring.MemberDao;
+import chap03.spring.MemberRegisterService;
 
 public class Assembler {
     private MemberDao memberDao;
