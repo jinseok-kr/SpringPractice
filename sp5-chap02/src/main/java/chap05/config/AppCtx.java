@@ -11,6 +11,11 @@ import org.springframework.context.annotation.Configuration;
 public class AppCtx {
 
     @Bean
+    public MemberDao memberDao2() {
+        return new MemberDao();
+    }
+
+    @Bean
     @Qualifier("printer")
     public MemberPrinter memberPrinter1() {
         return new MemberPrinter();
