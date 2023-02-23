@@ -1,5 +1,7 @@
 package chap11.spring;
 
+import chap11.execption.WrongIdPasswordException;
+
 import java.time.LocalDateTime;
 
 public class Member {
@@ -52,5 +54,9 @@ public class Member {
         if (!password.equals(oldPassword))
             throw new WrongIdPasswordException();
         this.password = newPassword;
+    }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
     }
 }

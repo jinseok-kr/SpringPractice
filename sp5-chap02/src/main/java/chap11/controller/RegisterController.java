@@ -1,12 +1,11 @@
 package chap11.controller;
 
-import chap11.spring.DuplicateMemberException;
+import chap11.execption.DuplicateMemberException;
 import chap11.spring.MemberRegisterService;
 import chap11.spring.RegisterRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

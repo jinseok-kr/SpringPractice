@@ -1,6 +1,6 @@
 package chap11.spring;
 
-import chap11.spring.RegisterRequest;
+import chap11.execption.DuplicateMemberException;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,7 @@
 package chap11.config;
 
-import chap11.spring.ChangePasswordService;
+import chap11.login.AuthService;
+import chap11.changepwd.ChangePasswordService;
 import chap11.spring.MemberDao;
 import chap11.spring.MemberRegisterService;
 import org.apache.tomcat.jdbc.pool.DataSource;
@@ -47,8 +48,11 @@ public class MemberConfig {
 
     @Bean
     public ChangePasswordService changePwdSvc() {
-        ChangePasswordService pwdSvc = new ChangePasswordService();
-        pwdSvc.setMemberDao(memberDao());
-        return pwdSvc;
+        return new ChangePasswordService(memberDao());
+    }
+
+    @Bean
+    public AuthService authService() {
+        return new AuthService(memberDao());
     }
 }

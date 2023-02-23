@@ -1,4 +1,4 @@
-package chap11.controller;
+package chap11.spring;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
