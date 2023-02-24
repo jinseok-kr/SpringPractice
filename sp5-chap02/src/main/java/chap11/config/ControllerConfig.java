@@ -3,17 +3,20 @@ package chap11.config;
 import chap11.changepwd.ChangePasswordService;
 import chap11.controller.*;
 import chap11.login.AuthService;
+import chap11.spring.MemberDao;
 import chap11.spring.MemberRegisterService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ControllerConfig {
+    private MemberDao memberDao;
     private MemberRegisterService memberRegSvc;
     private AuthService authService;
     private ChangePasswordService changePwdSvc;
 
-    public ControllerConfig(MemberRegisterService memberRegSvc, AuthService authService, ChangePasswordService changePwdSvc) {
+    public ControllerConfig(MemberDao memberDao, MemberRegisterService memberRegSvc, AuthService authService, ChangePasswordService changePwdSvc) {
+        this.memberDao = memberDao;
         this.memberRegSvc = memberRegSvc;
         this.authService = authService;
         this.changePwdSvc = changePwdSvc;
@@ -44,5 +47,14 @@ public class ControllerConfig {
     @Bean
     public ChangePwdController changePwdController() {
         return new ChangePwdController(changePwdSvc);
+    }
+
+    @Bean
+    public MemberListController memberListController() {
+        return new MemberListController(memberDao);
+    }
+
+    public MemberDetailController memberDetailController() {
+        return new MemberDetailController(memberDao);
     }
 }

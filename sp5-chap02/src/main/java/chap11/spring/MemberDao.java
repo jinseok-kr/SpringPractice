@@ -8,37 +8,67 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberDao {
 
     private JdbcTemplate jdbcTemplate;
 
+    private RowMapper<Member> memberRowMapper = new RowMapper<Member>() {
+        @Override
+        public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Member member = new Member(
+                    rs.getString("EMAIL"),
+                    rs.getString("PASSWORD"),
+                    rs.getString("NAME"),
+                    rs.getTimestamp("REGDATE").toLocalDateTime()
+            );
+            member.setId(rs.getLong("ID"));
+            return member;
+        }
+    };
+
     public MemberDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    public List<Member> selectAll() {
+        List<Member> results = jdbcTemplate.query(
+                "select * from MEMBER",
+                memberRowMapper
+        );
+        return results;
+    }
+
+    public Member selectById(Long memId) {
+        List<Member> results = jdbcTemplate.query(
+                "select * from MEMBER WHERE ID = ?",
+                memberRowMapper,
+                memId
+        );
+        return results.isEmpty() ? null : results.get(0);
     }
 
     public Member selectByEmail(String email) {
         List<Member> results = jdbcTemplate.query(
                 "select * from MEMBER where EMAIL = ?",
-                new RowMapper<Member>() {
-                    @Override
-                    public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        Member member = new Member(
-                                rs.getString("EMAIL"),
-                                rs.getString("PASSWORD"),
-                                rs.getString("NAME"),
-                                rs.getTimestamp("REGDATE").toLocalDateTime()
-                        );
-                        member.setId(rs.getLong("ID"));
-                        return member;
-                    }
-                },
+                memberRowMapper,
                 email
         );
 
         return results.isEmpty() ? null : results.get(0);
 
+    }
+
+    public List<Member> selectByRegdate(LocalDateTime from, LocalDateTime to) {
+        List<Member> results = jdbcTemplate.query(
+                "select * from MEMBER where REGDATE between ? and ? " + "order by REGDATE desc",
+                memberRowMapper,
+                from, to
+        );
+
+        return results;
     }
 
     public void insert(Member member) {
@@ -69,22 +99,7 @@ public class MemberDao {
         );
     }
 
-    public List<Member> selectAll() {
-        List<Member> results = jdbcTemplate.query(
-                "select * from MEMBER",
-                (ResultSet rs, int rowNum) -> {
-                    Member member = new Member(
-                            rs.getString("EMAIL"),
-                            rs.getString("PASSWORD"),
-                            rs.getString("NAME"),
-                            rs.getTimestamp("REGDATE").toLocalDateTime()
-                    );
-                    member.setId(rs.getLong("ID"));
-                    return member;
-                }
-        );
-        return results;
-    }
+
 
     //queryForObject() : 쿼리 실행 결과 행이 한 개인 경우 사용 가능
     public int count() {
