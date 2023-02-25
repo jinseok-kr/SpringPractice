@@ -6,7 +6,7 @@ import chap11.spring.MemberDao;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ChangePasswordService {
-    private MemberDao memberDao;
+    private MemberDao memberDao; 
 
     public ChangePasswordService(MemberDao memberDao) {
         this.memberDao = memberDao;
