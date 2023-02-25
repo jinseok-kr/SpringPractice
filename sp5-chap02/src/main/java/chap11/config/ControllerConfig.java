@@ -54,7 +54,13 @@ public class ControllerConfig {
         return new MemberListController(memberDao);
     }
 
+    @Bean
     public MemberDetailController memberDetailController() {
         return new MemberDetailController(memberDao);
+    }
+
+    @Bean
+    public RestMemberController restMemberController() {
+        return new RestMemberController(memberDao, memberRegSvc);
     }
 }

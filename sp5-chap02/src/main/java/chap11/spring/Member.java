@@ -1,14 +1,18 @@
 package chap11.spring;
 
 import chap11.execption.WrongIdPasswordException;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 
 public class Member {
     private Long id;
     private String email;
+    @JsonIgnore
     private String password;
     private String name;
+    @JsonFormat(pattern = "yyyyMMddHHmmss")
     private LocalDateTime registerDateTime;
 
     public Member(String email, String password, String name, LocalDateTime registerDateTime) {
